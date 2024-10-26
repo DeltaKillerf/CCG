@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #000000; /* Fundo preto */
+            color: #ffffff; /* Texto branco para contraste */
+        }
+        header {
+            background-color: #4e1f7c; /* Tom de roxo mais escuro */
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.5em;
+        }
+        nav {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            cursor: pointer; /* Cursor de ponteiro */
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .search-container {
+            margin-top: 20px; /* Ajuste aqui para um pouco mais acima */
+            display: flex;
+            justify-content: center;
+        }
+        input[type="text"] {
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        main {
+            padding: 20px;
+            background-color: #000000; /* Fundo do main para preto */
+            margin: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            max-width: 800px;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: transform 0.3s; /* Animação ao passar o mouse */
+        }
+        .gallery img:hover {
+            transform: scale(1.05); /* Efeito de zoom */
+        }
+        .add-image {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+        .add-image input[type="file"] {
+            margin: 10px 0;
+        }
+        .about-section {
+            display: none; /* Oculta a seção inicialmente */
+            margin-top: 40px;
+            text-align: center;
+        }
+        .about-section h2 {
+            margin-bottom: 10px;
+            color: #4e1f7c; /* Cor roxa */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CCG</h1>
+        <nav>
+            <a href="#" onclick="toggleAbout()">Configurações</a>
+            <a href="#" onclick="toggleAbout()">Sobre</a>
+        </nav>
+        <div class="search-container">
+            <input type="text" placeholder="Pesquisar...">
+            <button onclick="searchFunction()">Buscar</button>
+        </div>
+    </header>
+    <main>
+        <div class="content">
+            <button onclick="redirectToWhatsApp()">Clã CCG</button>
+            <h2>Galeria de Imagens</h2>
+            <div class="gallery" id="gallery">
+                <!-- Imagens adicionadas serão exibidas aqui -->
+            </div>
+            <div class="add-image">
+                <input type="file" id="imageUpload" accept="image/*">
+                <button onclick="addImage()">Adicionar Imagem</button>
+            </div>
+            <div class="about-section" id="about">
+                <h2>Sobre o Clã CCG</h2>
+                <p>O Clã CCG é um grupo dedicado a compartilhar conhecimentos, experiências e interagir com nossos membros. Junte-se a nós para explorar novas ideias e fazer parte dessa comunidade incrível!</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Carrega as imagens do armazenamento local ao iniciar
+        window.onload = function() {
+            const gallery = document.getElementById('gallery');
+            const images = JSON.parse(localStorage.getItem('images')) || [];
+            images.forEach(function(src) {
+                const img = document.createElement('img');
+                img.src = src;
+                gallery.appendChild(img);
+            });
+        };
+
+        function redirectToWhatsApp() {
+            window.location.href = "https://chat.whatsapp.com/L3GLffxg5AOLTi2mShwfp3";
+        }
+        
+        function searchFunction() {
+            const query = document.querySelector('input[type="text"]').value;
+            alert(`Você pesquisou por: ${query}`);
+        }
+
+        function addImage() {
+            const input = document.getElementById('imageUpload');
+            const gallery = document.getElementById('gallery');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '100%'; // Ajusta a imagem à largura da galeria
+                    gallery.appendChild(img);
+
+                    // Armazena a imagem no Local Storage
+                    const images = JSON.parse(localStorage.getItem('images')) || [];
+                    images.push(e.target.result);
+                    localStorage.setItem('images', JSON.stringify(images));
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                alert("Por favor, selecione uma imagem.");
+            }
+        }
+
+        function toggleAbout() {
+            const aboutSection = document.getElementById('about');
+            if (aboutSection.style.display === "none" || aboutSection.style.display === "") {
+                aboutSection.style.display = "block"; // Mostra a seção
+            } else {
+                aboutSection.style.display = "none"; // Oculta a seção
+            }
+        }
+    </script>
+</body>
+</html>
